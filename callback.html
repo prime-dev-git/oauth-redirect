@@ -1,0 +1,17 @@
+   <!DOCTYPE html>
+   <html>
+   <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <title>Returning to app…</title>
+   </head>
+   <body style="font-family:sans-serif;text-align:center;padding:40px">
+     <p>Returning to the app…</p>
+     <p><a id="open" href="#">Tap here if nothing happens</a></p>
+     <script>
+       var target = 'socialhub://oauth/callback' + location.search;
+       document.getElementById('open').href = target;
+       location.replace(target);
+     </script>
+   </body>
+   </html>
