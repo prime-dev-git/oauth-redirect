@@ -2,152 +2,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f8f5">
-  <title>Returning to Socials...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8f5">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <title>Returning to Socials</title>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f7f8f5;
-      font-family: Arial, sans-serif;
-      padding: 24px;
-      color: #222;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      background: white;
-      padding: 30px 24px;
-      border-radius: 18px;
-      box-shadow: 0 8px 35px rgba(0,0,0,.07);
-    }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: #f7f8f5;
+            font-family: Arial, sans-serif;
+            color: #222;
+        }
 
-    .icon {
-      width: 58px;
-      height: 58px;
-      display: grid;
-      place-items: center;
-      margin: 0 auto 18px;
-      border-radius: 18px;
-      background: #eeeaff;
-      color: #6c5ce7;
-      font-size: 28px;
-    }
+        .container {
+            width: 100%;
+            max-width: 380px;
+            padding: 32px 24px;
+            text-align: center;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 35px rgba(0,0,0,.07);
+        }
 
-    h2 {
-      font-size: 21px;
-      margin: 0 0 10px;
-    }
+        .icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            background: #eeeaff;
+            color: #6c5ce7;
+            font-size: 28px;
+        }
 
-    p {
-      color: #777;
-      font-size: 14px;
-      line-height: 1.6;
-    }
+        h2 {
+            font-size: 21px;
+            margin: 0 0 10px;
+        }
 
-    .button {
-      display: block;
-      width: 100%;
-      padding: 15px;
-      margin-top: 13px;
-      border-radius: 11px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
+        p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-    .primary {
-      background: #6c5ce7;
-      color: white;
-    }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-top: 14px;
+            border-radius: 11px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
 
-    .secondary {
-      background: #292929;
-      color: white;
-    }
+        .primary {
+            background: #6c5ce7;
+            color: white;
+        }
 
-    #status {
-      margin-top: 18px;
-      font-size: 12px;
-      color: #888;
-      word-break: break-word;
-    }
-  </style>
+        .secondary {
+            background: #292929;
+            color: white;
+        }
+
+        #status {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #888;
+            word-break: break-word;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container">
+
+<div class="container">
+
     <div class="icon">✓</div>
 
     <h2>Login successful!</h2>
 
     <p>
-      Your authentication is complete.
-      Tap the button below to return to Socials.
+        Your account has been authenticated.
+        Return to Socials to continue.
     </p>
 
     <a id="openApp" class="button primary" href="#">
-      Open Socials
+        Open Socials
     </a>
 
     <a id="openIntent" class="button secondary" href="#">
-      Try alternative method
+        Try alternative method
     </a>
 
     <div id="status">
-      Waiting for you to open the app...
+        Ready to open Socials.
     </div>
-  </div>
 
-  <script>
-    (() => {
-      // Must match callbackUrlScheme in Flutter.
-      const APP_SCHEME = 'socialhub';
+</div>
 
-      // Replace with the REAL applicationId from build.gradle.
-      const ANDROID_PACKAGE = 'com.example.socials';
+<script>
+(() => {
 
-      // Preserve OAuth parameters.
-      const params = window.location.search;
-      const fragment = window.location.hash;
+    // Must match MainActivity's intent filter.
+    const SCHEME = 'socials';
 
-      // Standard custom-scheme callback.
-      const callbackUrl =
-        `${APP_SCHEME}://oauth/callback${params}${fragment}`;
+    // Must be your actual Android applicationId.
+    const PACKAGE = 'com.example.socials';
 
-      // Android Intent fallback.
-      const intentUrl =
+    // Preserve OAuth query parameters.
+    const params = window.location.search;
+    const hash = window.location.hash;
+
+    // MainActivity deep link.
+    const appUrl =
+        `${SCHEME}://oauth/callback${params}${hash}`;
+
+    // Android Intent fallback.
+    const intentUrl =
         `intent://oauth/callback${params}` +
-        `#Intent;scheme=${APP_SCHEME};` +
-        `package=${ANDROID_PACKAGE};end`;
+        `#Intent;scheme=${SCHEME};` +
+        `package=${PACKAGE};end`;
 
-      const openApp = document.getElementById('openApp');
-      const openIntent = document.getElementById('openIntent');
-      const status = document.getElementById('status');
+    const openApp = document.getElementById('openApp');
+    const openIntent = document.getElementById('openIntent');
+    const status = document.getElementById('status');
 
-      openApp.href = callbackUrl;
-      openIntent.href = intentUrl;
+    openApp.href = appUrl;
+    openIntent.href = intentUrl;
 
-      openApp.addEventListener('click', () => {
+    openApp.addEventListener('click', () => {
         status.textContent = 'Opening Socials...';
-      });
+    });
 
-      openIntent.addEventListener('click', () => {
-        status.textContent = 'Trying the alternative launch method...';
-      });
-    })();
-  </script>
+    openIntent.addEventListener('click', () => {
+        status.textContent = 'Trying Android app launch...';
+    });
+
+})();
+</script>
+
 </body>
 </html>
