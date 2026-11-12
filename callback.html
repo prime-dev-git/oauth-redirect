@@ -5,19 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Returning to app…</title>
 </head>
-<body style="font-family:sans-serif;text-align:center;padding:40px">
-  <p>Returning to the app…</p>
-  <p><a id="open" href="#" style="font-size:20px">Tap here to open the app</a></p>
+<body style="font-family:sans-serif;text-align:center;padding:30px">
+  <p>Login complete. Tap a button to return to the app.</p>
+  <p><a id="a1" href="#" style="display:inline-block;padding:14px 22px;background:#6C5CE7;color:#fff;border-radius:10px;text-decoration:none">Open app (option 1)</a></p>
+  <p><a id="a2" href="#" style="display:inline-block;padding:14px 22px;background:#444;color:#fff;border-radius:10px;text-decoration:none">Open app (option 2)</a></p>
+  <p id="dbg" style="font-size:11px;color:#888;word-break:break-all"></p>
   <script>
     var q = location.search;
     var scheme = 'socialhub://oauth/callback' + q;
-    var pkg = 'com.example.socials';
+    var pkg = 'com.example.socials'; // must equal applicationId
     var intent = 'intent://oauth/callback' + q +
       '#Intent;scheme=socialhub;package=' + pkg + ';end';
-    var isAndroid = /android/i.test(navigator.userAgent);
-    var target = isAndroid ? intent : scheme;
-    document.getElementById('open').href = target;
-    location.replace(target);
+    document.getElementById('a1').href = scheme;
+    document.getElementById('a2').href = intent;
+    document.getElementById('dbg').textContent = scheme;
+    setTimeout(function () { location.href = scheme; }, 300);
   </script>
 </body>
 </html>
