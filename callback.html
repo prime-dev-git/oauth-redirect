@@ -4,49 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8f5">
 
     <title>Returning to Socials</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
-            display: grid;
-            place-items: center;
-            background: #f7f8f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            box-sizing: border-box;
+            background: #f7f8f5;
+            color: #222;
         }
 
         .card {
+            width: 100%;
+            max-width: 380px;
             background: white;
             padding: 32px 24px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 35px rgba(0,0,0,.07);
+        }
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            margin: auto auto 20px;
+            background: #eeeaff;
+            color: #6c5ce7;
             border-radius: 18px;
-            max-width: 360px;
-            width: 100%;
-            box-sizing: border-box;
+            font-size: 28px;
         }
 
         h2 {
-            color: #222;
+            font-size: 22px;
+            margin-bottom: 10px;
         }
 
         p {
             color: #777;
+            font-size: 14px;
             line-height: 1.6;
         }
 
-        button {
-            border: 0;
-            background: #6c5ce7;
-            color: white;
-            padding: 15px 24px;
-            border-radius: 10px;
+        .btn {
+            display: block;
             width: 100%;
-            font-weight: bold;
-            cursor: pointer;
+            padding: 16px;
+            margin-top: 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .primary {
+            color: white;
+            background: #6c5ce7;
+        }
+
+        .secondary {
+            color: white;
+            background: #292929;
+        }
+
+        #status {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #888;
         }
     </style>
 </head>
@@ -55,41 +91,68 @@
 
 <div class="card">
 
-    <h2>Login successful!</h2>
+    <div class="icon">✓</div>
 
-    <p id="status">
-        Returning to Socials...
+    <h2 id="heading">Login successful!</h2>
+
+    <p id="message">
+        Your account has been connected.
+        Return to Socials to continue.
     </p>
 
-    <button id="openApp">
-        Return to Socials
-    </button>
+    <a id="openApp" class="btn primary" href="#">
+        Open Socials
+    </a>
+
+    <a id="openIntent" class="btn secondary" href="#">
+        Alternative app launch
+    </a>
+
+    <div id="status">
+        Ready to return to the application.
+    </div>
 
 </div>
 
 <script>
-(() => {
+(function () {
 
-    const CALLBACK_URL =
-        'socialhub://oauth/callback' +
-        window.location.search +
-        window.location.hash;
+    const SCHEME = 'socialhub';
+    const PACKAGE = 'com.example.socials';
 
-    const status = document.getElementById('status');
+    // TikTok returns code, state or error in the query string.
+    const params = window.location.search;
 
-    function returnToApp() {
-        status.textContent = 'Opening Socials...';
+    // Construct the OAuth callback.
+    const callback =
+        SCHEME + '://oauth/callback' + params;
 
-        window.location.href = CALLBACK_URL;
+    // Android intent alternative.
+    const intent =
+        'intent://oauth/callback' + params +
+        '#Intent;' +
+        'scheme=' + SCHEME + ';' +
+        'package=' + PACKAGE + ';' +
+        'end';
+
+    const openApp = document.getElementById('openApp');
+    const openIntent = document.getElementById('openIntent');
+
+    // Real anchor links: browser receives a user gesture.
+    openApp.href = callback;
+    openIntent.href = intent;
+
+    // Display OAuth errors without hiding them.
+    const search = new URLSearchParams(params);
+    const error = search.get('error');
+
+    if (error) {
+        document.getElementById('heading').textContent =
+            'Authentication was not completed';
+
+        document.getElementById('message').textContent =
+            search.get('error_description') || error;
     }
-
-    document.getElementById('openApp')
-        .addEventListener('click', returnToApp);
-
-    // Attempt automatic redirect.
-    window.addEventListener('load', () => {
-        setTimeout(returnToApp, 500);
-    });
 
 })();
 </script>
