@@ -1,17 +1,23 @@
-   <!DOCTYPE html>
-   <html>
-   <head>
-     <meta charset="utf-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1">
-     <title>Returning to app…</title>
-   </head>
-   <body style="font-family:sans-serif;text-align:center;padding:40px">
-     <p>Returning to the app…</p>
-     <p><a id="open" href="#">Tap here if nothing happens</a></p>
-     <script>
-       var target = 'socialhub://oauth/callback' + location.search;
-       document.getElementById('open').href = target;
-       location.replace(target);
-     </script>
-   </body>
-   </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Returning to app…</title>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:40px">
+  <p>Returning to the app…</p>
+  <p><a id="open" href="#" style="font-size:20px">Tap here to open the app</a></p>
+  <script>
+    var q = location.search;
+    var scheme = 'socialhub://oauth/callback' + q;
+    var pkg = 'YOUR.APPLICATION.ID';
+    var intent = 'intent://oauth/callback' + q +
+      '#Intent;scheme=socialhub;package=' + pkg + ';end';
+    var isAndroid = /android/i.test(navigator.userAgent);
+    var target = isAndroid ? intent : scheme;
+    document.getElementById('open').href = target;
+    location.replace(target);
+  </script>
+</body>
+</html>
